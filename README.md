@@ -1,6 +1,6 @@
 # PostHaste
 
-A proof-of-concept Ruby library that wraps the JSON endpoints provided for Washington Post articles and blog posts.
+A proof-of-concept Ruby library that wraps the JSON endpoints provided for Washington Post articles and blog posts. Potentially suitable for building custom feeds of Washington Post content.
 
 ## Installation
 
@@ -18,7 +18,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Post Haste currently can accept a URL of a Washington Post article or blog post, and converts that URL into a Ruby object with a number of methods that describe it, including its title, byline, published and updated datetimes, and more.
 
 ## Contributing
 

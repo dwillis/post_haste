@@ -23,10 +23,15 @@ Or install it yourself as:
 Post Haste currently can accept a URL of a Washington Post article or blog post, and converts that URL into a Ruby object with a number of methods that describe it, including its title, byline, published and updated datetimes, and more:
 
   url = "http://www.washingtonpost.com/blogs/the-fix/post/republicans-on-the-2012-gop-field-blah/2012/03/15/gIQAT7CSFS_blog.html"
+
   @article = Article.create_from_url(url)
+
   @article.title
+
   => "Republicans on the 2012 GOP field: Blah."
+
   @article.display_datetime.to_s
+
   => "2012-03-16T06:30:00-04:00"
 
 ## Contributing

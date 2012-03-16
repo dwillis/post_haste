@@ -16,6 +16,12 @@ module PostHaste
        instance_variable_set("@#{k}", v)
       end
     end
+    
+    def self.create_from_url(url)
+      json_url = get_json(url)
+      result = parse_json(json_url)
+      create(result)
+    end
   
     # Given a Washington Post story or blog url, can turn that url into a JSON API endpoint
     def self.get_json(url)

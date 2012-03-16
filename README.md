@@ -24,7 +24,7 @@ Post Haste currently can accept a URL of a Washington Post article or blog post,
 
   url = "http://www.washingtonpost.com/blogs/the-fix/post/republicans-on-the-2012-gop-field-blah/2012/03/15/gIQAT7CSFS_blog.html"
   @article = Article.create_from_url(url)
-  => #<PostHaste::Article:0x000001009f3228 @type="BlogStory", @uuid="ce8a183a-6f0c-11e1-9118-82b72e1e284a", @title="Republicans on the 2012 GOP field: Blah.", @blurb=nil, @has_correction=false, @correction=nil, @has_clarification=false, @clarification=nil, @permalink="http://www.washingtonpost.com/blogs/the-fix/post/republicans-on-the-2012-gop-field-blah/2012/03/15/gIQAT7CSFS_blog.html", @short_url="http://wapo.st/zeg0JO", @byline="Chris Cillizza and Aaron Blake",....>
+  #=> #<PostHaste::Article:0x000001009f3228 @type="BlogStory", @uuid="ce8a183a-6f0c-11e1-9118-82b72e1e284a", @title="Republicans on the 2012 GOP field: Blah.", @blurb=nil, @has_correction=false, @correction=nil, @has_clarification=false, @clarification=nil, @permalink="http://www.washingtonpost.com/blogs/the-fix/post/republicans-on-the-2012-gop-field-blah/2012/03/15/gIQAT7CSFS_blog.html", @short_url="http://wapo.st/zeg0JO", @byline="Chris Cillizza and Aaron Blake",....>
 
 ## Contributing
 

@@ -15,7 +15,7 @@ class TestPostHaste::TestArticle < Test::Unit::TestCase
 			assert_kind_of(Article, @article)
 		end
 		
-		%w(id type title blurb).each do |attr|
+		%w(uuid type title blurb).each do |attr|
 			should "assign the value of the @#{attr} attribute from the '#{attr}' key in the hash" do
 				assert_equal(@result['contentConfig'][attr], @article.send(attr))
 			end

@@ -7,7 +7,7 @@ require 'json'
 module PostHaste
   class Article
   
-    attr_reader :id, :type, :title, :blurb, :has_correction, :correction, :has_clarification, :clarification, :permalink, :short_url, :email_url,
+    attr_reader :uuid, :type, :title, :blurb, :has_correction, :correction, :has_clarification, :clarification, :permalink, :short_url, :email_url,
     :comments_url, :graphic_url, :video_url, :byline, :organization, :credits, :created_datetime, :published_datetime, :display_datetime, :updated_datetime,
     :section, :tags
    
@@ -19,8 +19,8 @@ module PostHaste
   
     # Given a Washington Post story or blog url, can turn that url into a JSON API endpoint
     def self.get_json(url)
-      url.gsub('_story','_json') if url.include?("_story")
-      url.gsub('_blog','_json') if url.include?("_blog")
+      return url.gsub('_story','_json') if url.include?("_story")
+      return url.gsub('_blog','_json') if url.include?("_blog")
     end
     
     # parses a Washington Post story or blog JSON response
@@ -30,14 +30,14 @@ module PostHaste
     
     # Post CMS produces unix timestamps, but with extra zeroes
     def self.parse_datetime(seconds)
-      seconds = seconds.to_s.first(10)
-      Time.at(seconds).to_datetime
+      seconds = seconds.to_s[0..9]
+      Time.at(seconds.to_i).to_datetime
     end
     
     # creates an Article object from a JSON response
     def self.create(params={})
       self.new :type => params['contentConfig']['type'],
-               :id => params['contentConfig']['uuid'],
+               :uuid => params['contentConfig']['uuid'],
                :title => params['contentConfig']['title'],
                :blurb => params['contentConfig']['blurb'],
                :has_correction => params['contentConfig']['hasCorrection'],

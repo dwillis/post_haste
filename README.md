@@ -1,6 +1,6 @@
 # PostHaste
 
-TODO: Write a gem description
+A proof-of-concept Ruby library that wraps the JSON endpoints provided for Washington Post articles and blog posts.
 
 ## Installation
 

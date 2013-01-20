@@ -1,7 +1,6 @@
 #!/usr/bin/env rake
 require 'bundler'
 require "bundler/gem_tasks"
-include Rake::DSL
 Bundler::GemHelper.install_tasks
 
 require 'rake/testtask'

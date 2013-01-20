@@ -1,11 +1,9 @@
-require 'rubygems'
 require 'open-uri'
-require 'date'
 require 'json'
 
-# Represents a single Washington Post story or blog post.
 module PostHaste
   class Article
+    # Represents a single Washington Post story or blog post.
   
     attr_reader :uuid, :type, :title, :blurb, :has_correction, :correction, :has_clarification, :clarification, :permalink, :short_url, :email_url,
     :comments_url, :graphic_url, :video_url, :byline, :organization, :credits, :created_datetime, :published_datetime, :display_datetime, :updated_datetime,
@@ -18,15 +16,21 @@ module PostHaste
     end
     
     def self.create_from_url(url)
-      json_url = get_json(url)
+      json_url, source = get_json(url)
       result = parse_json(json_url)
-      create(result)
+      create_from_source(source, result)
     end
   
     # Given a Washington Post story or blog url, can turn that url into a JSON API endpoint
+    # returns the url and a source (cms or wordpress) used in Article creation
     def self.get_json(url)
-      return url.gsub('_story','_json') if url.include?("_story")
-      return url.gsub('_blog','_json') if url.include?("_blog")
+      if url.include?('/wp/')
+        [url+'?json=1', 'wordpress']
+      elsif url.include?("_story")
+        [url.gsub('_story','_json'), 'cms']
+      elsif url.include?("_blog")
+        [url.gsub('_blog','_json'), 'cms']
+      end
     end
     
     # parses a Washington Post story or blog JSON response
@@ -38,6 +42,14 @@ module PostHaste
     def self.parse_datetime(seconds)
       seconds = seconds.to_s[0..9]
       Time.at(seconds.to_i).to_datetime
+    end
+    
+    def self.create_from_source(source, result)
+      if source == 'cms'
+        create(result)
+      elsif source == 'wordpress'
+        create_from_wordpress(result)
+      end
     end
     
     # creates an Article object from a JSON response
@@ -68,5 +80,34 @@ module PostHaste
       
       
     end
+    
+    # creates an Article object from a WordPress JSON response
+    def self.create_from_wordpress(params={})
+      self.new :type => params['post']['type'],
+               :uuid => params['post']['id'],
+               :title => params['post']['title'],
+               :blurb => params['post']['excerpt'],
+               :has_correction => nil,
+               :correction => nil,
+               :has_clarification => nil,
+               :clarification => nil,
+               :permalink => params['post']['url'],
+               :short_url => nil,
+               :email_url => nil,
+               :comments_url => params['post']['url'],
+               :graphic_url => nil,
+               :video_url => nil,
+               :byline => params['post']['author']['name'],
+               :organization => nil,
+               :credits => nil,
+               :created_datetime => parse_datetime(params['post']['date']),
+               :published_datetime => parse_datetime(params['post']['date']),
+               :display_datetime => parse_datetime(params['post']['modified']),
+               :updated_datetime => parse_datetime(params['post']['modified']),
+               :section => nil,
+               :tags => params['post']['tags']
+      
+    end    
+
   end
 end

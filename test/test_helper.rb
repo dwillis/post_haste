@@ -3,9 +3,9 @@ require 'rubygems'
 require 'shoulda'
 require 'json'
 
-%w(article).each do |f|
-  require File.join(File.dirname(__FILE__), '../lib/post_haste', f)
-end
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+$LOAD_PATH.unshift(File.dirname(__FILE__))
+require 'post_haste'
 
 module TestPostHaste
 end

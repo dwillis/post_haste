@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    post_haste (0.6)
+    post_haste (0.7)
       json
 
 GEM

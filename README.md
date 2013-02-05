@@ -24,7 +24,7 @@ Post Haste currently can accept a URL of a Washington Post article or blog post,
 
   url = "http://www.washingtonpost.com/blogs/the-fix/post/republicans-on-the-2012-gop-field-blah/2012/03/15/gIQAT7CSFS_blog.html"
 
-  @article = Article.create_from_url(url)
+  @article = Article.create_from_url(url, 25) # 25 is comment limit, default is 15.
 
   @article.title
 

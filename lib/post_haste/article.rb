@@ -16,9 +16,9 @@ module PostHaste
       end
     end
     
-    def self.latest_comments_url(url)
+    def self.latest_comments_url(url, limit)
       escaped_uri = URI.escape(url)
-      "http://echoapi.wpdigital.net/api/v1/search?q=((childrenof%3A+#{escaped_uri}+source%3Awashpost.com+(((state%3AUntouched+user.state%3AModeratorApproved)+OR+(state%3ACommunityFlagged%2CModeratorApproved%2CModeratorDeleted+-user.state%3AModeratorBanned%2CModeratorDeleted)+)+)+++))+itemsPerPage%3A+15+sortOrder%3A+reverseChronological+safeHTML%3Aaggressive+childrenSortOrder%3Achronological+childrenItemsPerPage%3A10+children%3A+1++(((state%3AUntouched+user.state%3AModeratorApproved)+OR+(state%3ACommunityFlagged%2CModeratorApproved+-user.state%3AModeratorBanned%2CModeratorDeleted)+)+)++&appkey=prod.washpost.com"
+      "http://echoapi.wpdigital.net/api/v1/search?q=((childrenof%3A+#{escaped_uri}+source%3Awashpost.com+(((state%3AUntouched+user.state%3AModeratorApproved)+OR+(state%3ACommunityFlagged%2CModeratorApproved%2CModeratorDeleted+-user.state%3AModeratorBanned%2CModeratorDeleted)+)+)+++))+itemsPerPage%3A+#{limit}+sortOrder%3A+reverseChronological+safeHTML%3Aaggressive+childrenSortOrder%3Achronological+childrenItemsPerPage%3A10+children%3A+1++(((state%3AUntouched+user.state%3AModeratorApproved)+OR+(state%3ACommunityFlagged%2CModeratorApproved+-user.state%3AModeratorBanned%2CModeratorDeleted)+)+)++&appkey=prod.washpost.com"
     end
     
     def self.parse_latest_comments(article, comments_url)
@@ -26,10 +26,11 @@ module PostHaste
       Comment.create_comments_from_objects(article, results['entries'])
     end
     
-    def self.create_from_url(url)
+    # comment limit defaults to 15, but can be set higher or lower
+    def self.create_from_url(url, comment_limit=nil)
       json_url, source = get_json(url)
       result = parse_json(json_url)
-      create_from_source(source, result)
+      create_from_source(source, result, comment_limit)
     end
   
     # Given a Washington Post story or blog url, can turn that url into a JSON API endpoint
@@ -55,16 +56,17 @@ module PostHaste
       Time.at(seconds.to_i).to_datetime
     end
     
-    def self.create_from_source(source, result)
+    def self.create_from_source(source, result, comment_limit)
       if source == 'cms'
-        create(result)
+        create(result, comment_limit)
       elsif source == 'wordpress'
         create_from_wordpress(result)
       end
     end
     
     # creates an Article object from a JSON response
-    def self.create(params={})
+    # with 15 latest comments, can be configured.
+    def self.create(params={}, limit=15)
       self.new :type => params['contentConfig']['type'],
                :uuid => params['contentConfig']['uuid'],
                :title => params['contentConfig']['title'],
@@ -88,7 +90,7 @@ module PostHaste
                :updated_datetime => parse_datetime(params['contentConfig']['dateConfig']['dateUpdated']),
                :section => params['metaConfig']['section'],
                :tags => params['metaConfig']['tags'],
-               :comments => parse_latest_comments(params['contentConfig']['permaLinkURL'], latest_comments_url(params['contentConfig']['permaLinkURL']))
+               :comments => parse_latest_comments(params['contentConfig']['permaLinkURL'], latest_comments_url(params['contentConfig']['permaLinkURL'], limit=15))
       
     end
     

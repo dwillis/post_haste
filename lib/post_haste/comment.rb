@@ -17,7 +17,7 @@ module PostHaste
       results = []
       comments.each do |comment|
         c = Comment.new({:id => comment['object']['id'], :article_url => article_url, :author => comment['actor']['title'], :content => comment['object']['content'], :status => comment['object']['status'], :published => DateTime.parse(comment['object']['published'])})
-        results << hash
+        results << c
       end
       results
     end

@@ -16,14 +16,14 @@ module PostHaste
       end
     end
     
-    def latest_comments_url(url)
+    def self.latest_comments_url(url)
       escaped_uri = URI.escape(url)
       "http://echoapi.wpdigital.net/api/v1/search?q=((childrenof%3A+#{escaped_uri}+source%3Awashpost.com+(((state%3AUntouched+user.state%3AModeratorApproved)+OR+(state%3ACommunityFlagged%2CModeratorApproved%2CModeratorDeleted+-user.state%3AModeratorBanned%2CModeratorDeleted)+)+)+++))+itemsPerPage%3A+15+sortOrder%3A+reverseChronological+safeHTML%3Aaggressive+childrenSortOrder%3Achronological+childrenItemsPerPage%3A10+children%3A+1++(((state%3AUntouched+user.state%3AModeratorApproved)+OR+(state%3ACommunityFlagged%2CModeratorApproved+-user.state%3AModeratorBanned%2CModeratorDeleted)+)+)++&appkey=prod.washpost.com"
     end
     
     def self.parse_latest_comments(article, comments_url)
       results = JSON.parse(open(comments_url).read)
-      Comment.create_comments_from_objects(results['entries'])
+      Comment.create_comments_from_objects(article, results['entries'])
     end
     
     def self.create_from_url(url)

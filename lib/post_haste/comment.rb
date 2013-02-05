@@ -4,6 +4,7 @@ require 'json'
 
 module PostHaste
   class Comment
+    # Represents a comment on a Washington Post story
     
     attr_reader :id, :article_url, :author, :content, :status, :published 
     

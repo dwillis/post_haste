@@ -1,3 +1,3 @@
-%w(article).each do |f|
-  require File.join(File.dirname(__FILE__), '../lib/post_haste', f)
+%w(article.rb comment.rb).each do |f|
+  require File.join(File.dirname(__FILE__), 'post_haste/', f)
 end

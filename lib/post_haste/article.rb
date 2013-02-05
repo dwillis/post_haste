@@ -1,4 +1,5 @@
 require 'open-uri'
+require 'uri'
 require 'json'
 
 module PostHaste
@@ -7,12 +8,22 @@ module PostHaste
   
     attr_reader :uuid, :type, :title, :blurb, :has_correction, :correction, :has_clarification, :clarification, :permalink, :short_url, :email_url,
     :comments_url, :graphic_url, :video_url, :byline, :organization, :credits, :created_datetime, :published_datetime, :display_datetime, :updated_datetime,
-    :section, :tags
+    :section, :tags, :comments
    
     def initialize(params={})
       params.each_pair do |k,v|
        instance_variable_set("@#{k}", v)
       end
+    end
+    
+    def latest_comments_url(url)
+      escaped_uri = URI.escape(url)
+      "http://echoapi.wpdigital.net/api/v1/search?q=((childrenof%3A+#{escaped_uri}+source%3Awashpost.com+(((state%3AUntouched+user.state%3AModeratorApproved)+OR+(state%3ACommunityFlagged%2CModeratorApproved%2CModeratorDeleted+-user.state%3AModeratorBanned%2CModeratorDeleted)+)+)+++))+itemsPerPage%3A+15+sortOrder%3A+reverseChronological+safeHTML%3Aaggressive+childrenSortOrder%3Achronological+childrenItemsPerPage%3A10+children%3A+1++(((state%3AUntouched+user.state%3AModeratorApproved)+OR+(state%3ACommunityFlagged%2CModeratorApproved+-user.state%3AModeratorBanned%2CModeratorDeleted)+)+)++&appkey=prod.washpost.com"
+    end
+    
+    def self.parse_latest_comments(article, comments_url)
+      results = JSON.parse(open(comments_url).read)
+      Comment.create_comments_from_objects(results['entries'])
     end
     
     def self.create_from_url(url)
@@ -76,8 +87,8 @@ module PostHaste
                :display_datetime => parse_datetime(params['contentConfig']['dateConfig']['displayDate']),
                :updated_datetime => parse_datetime(params['contentConfig']['dateConfig']['dateUpdated']),
                :section => params['metaConfig']['section'],
-               :tags => params['metaConfig']['tags']
-      
+               :tags => params['metaConfig']['tags'],
+               :comments => parse_latest_comments(params['contentConfig']['permaLinkURL'], latest_comments_url(params['contentConfig']['permaLinkURL']))
       
     end
     

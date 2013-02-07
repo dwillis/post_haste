@@ -1,6 +1,6 @@
 # PostHaste
 
-A Ruby library that wraps the JSON endpoints provided for Washington Post articles and blog posts. Potentially suitable for building custom feeds of Washington Post content, in the event that you don't want to actually visit washingtonpost.com. It handles articles and blog posts from the Post's CMS (along with the most recent 15 comments from those), as well as WordPress-powered blogs, which have slightly different output.
+A Ruby library that wraps the JSON endpoints provided for Washington Post articles and blog posts. Potentially suitable for building custom feeds of Washington Post content, in the event that you don't want to actually visit washingtonpost.com. It handles articles and blog posts from the Post's CMS (along with the most recent 15 comments), as well as The Post's WordPress-powered blogs, which have slightly different output (but also includes comments).
 
 Tested under Ruby 1.9.2 & 1.9.3.
 

@@ -27,7 +27,7 @@ module PostHaste
     end
     
     # comment limit defaults to 15, but can be set higher or lower
-    def self.create_from_url(url, comment_limit=nil)
+    def self.create_from_url(url, comment_limit=15)
       json_url, source = get_json(url)
       result = parse_json(json_url)
       create_from_source(source, result, comment_limit)

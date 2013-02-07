@@ -60,7 +60,7 @@ module PostHaste
       if source == 'cms'
         create(result, comment_limit)
       elsif source == 'wordpress'
-        create_from_wordpress(result)
+        create_from_wordpress(result, comment_limit)
       end
     end
     
@@ -90,12 +90,12 @@ module PostHaste
                :updated_datetime => parse_datetime(params['contentConfig']['dateConfig']['dateUpdated']),
                :section => params['metaConfig']['section'],
                :tags => params['metaConfig']['tags'],
-               :comments => parse_latest_comments(params['contentConfig']['permaLinkURL'], latest_comments_url(params['contentConfig']['permaLinkURL'], limit=15))
+               :comments => parse_latest_comments(params['contentConfig']['permaLinkURL'], latest_comments_url(params['contentConfig']['permaLinkURL'], limit=limit))
       
     end
     
     # creates an Article object from a WordPress JSON response
-    def self.create_from_wordpress(params={})
+    def self.create_from_wordpress(params={}, limit=15)
       self.new :type => params['post']['type'],
                :uuid => params['post']['id'],
                :title => params['post']['title'],
@@ -118,8 +118,8 @@ module PostHaste
                :display_datetime => parse_datetime(params['post']['modified']),
                :updated_datetime => parse_datetime(params['post']['modified']),
                :section => nil,
-               :tags => params['post']['tags']
-      
+               :tags => params['post']['tags'],
+               :comments => parse_latest_comments(params['post']['url'], latest_comments_url(params['post']['url'], limit))
     end    
 
   end

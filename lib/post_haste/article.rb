@@ -37,6 +37,7 @@ module PostHaste
     # returns the url and a source (cms or wordpress) used in Article creation
     def self.get_json(url)
       if url.include?('/wp/')
+        url = url.split('?').first # strip out anything after a ?
         [url+'?json=1', 'wordpress']
       elsif url.include?("_story")
         [url.gsub('_story','_json'), 'cms']

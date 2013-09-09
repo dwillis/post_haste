@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    post_haste (0.9)
+    post_haste (0.9.1)
       json
       nokogiri
 
@@ -29,5 +29,5 @@ PLATFORMS
 DEPENDENCIES
   bundler (>= 1.1.0)
   post_haste!
-  rake (= 0.8.7)
+  rake
   shoulda

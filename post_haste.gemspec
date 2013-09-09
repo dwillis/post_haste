@@ -18,8 +18,9 @@ Gem::Specification.new do |gem|
   gem.required_rubygems_version = ">= 1.3.6"
   gem.rubyforge_project         = "post_haste"
   gem.add_runtime_dependency "json"
+  gem.add_runtime_dependency "nokogiri"
   
-  gem.add_development_dependency "rake", "0.8.7"
+  gem.add_development_dependency "rake"
   gem.add_development_dependency "bundler", ">= 1.1.0"
   gem.add_development_dependency "shoulda"
   

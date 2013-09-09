@@ -36,7 +36,7 @@ module PostHaste
     # Given a Washington Post story or blog url, can turn that url into a JSON API endpoint
     # returns the url and a source (cms or wordpress) used in Article creation
     def self.get_json(url)
-      if url.include?('/wp/')
+      if url.include?('/wp/') or url.include?('/sf/')
         url = url.split('?').first # strip out anything after a ?
         [url+'?json=1', 'wordpress']
       elsif url.include?("_story")

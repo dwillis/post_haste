@@ -36,7 +36,11 @@ Post Haste currently can accept a URL of a Washington Post article or blog post,
   
   @article.comments.first.author
 
-  => "Horatio_Swaggbottom"
+  => "iseasygoing"
+  
+  @article.comments.first.permalink(@article)
+  
+  => "http://www.washingtonpost.com/blogs/the-fix/post/republicans-on-the-2012-gop-field-blah/2012/03/15/gIQAT7CSFS_comment.html?commentID=washingtonpost.com/ECHO/item/1332046095-915-174"
   
   
 ## In the Wild

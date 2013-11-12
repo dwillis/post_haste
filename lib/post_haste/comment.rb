@@ -23,8 +23,14 @@ module PostHaste
       results
     end
     
-    def permalink
-      article_url+'?commentID='+id
+    def permalink(article)
+      if article.type == 'BlogStory'
+        article_url.gsub('_blog','_comment')+'?commentID='+id
+      elsif article.type == 'article'
+        article_url.gsub('_story','_comment')+'?commentID='+id
+      else
+        article_url+'?commentID='+id
+      end
     end
     
   end

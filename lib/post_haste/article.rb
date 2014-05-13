@@ -6,9 +6,8 @@ module PostHaste
   class Article
     # Represents a single Washington Post story or blog post.
   
-    attr_reader :uuid, :type, :title, :blurb, :has_correction, :correction, :has_clarification, :clarification, :permalink, :short_url, :email_url,
-    :comments_url, :graphic_url, :video_url, :byline, :organization, :credits, :created_datetime, :published_datetime, :display_datetime, :updated_datetime,
-    :section, :tags, :comments
+    attr_reader :uuid, :type, :title, :summary, :mobile_headline, :web_headline, :permalink, :short_url, :keywords, :email, :bio_page,
+    :comments_url, :byline, :created_datetime, :published_datetime, :display_datetime, :updated_datetime, :section, :tags, :comments
    
     def initialize(params={})
       params.each_pair do |k,v|
@@ -28,22 +27,14 @@ module PostHaste
     
     # comment limit defaults to 15, but can be set higher or lower
     def self.create_from_url(url, comment_limit=15)
-      json_url, source = get_json(url)
-      result = parse_json(json_url)
-      create_from_source(source, result, comment_limit)
+      result = parse_json(get_json(url))
+      create(result, comment_limit)
     end
   
     # Given a Washington Post story or blog url, can turn that url into a JSON API endpoint
-    # returns the url and a source (cms or wordpress) used in Article creation
+    # returns the url and the source used in Article creation
     def self.get_json(url)
-      if url.include?('/wp/') or url.include?('/sf/')
-        url = url.split('?').first # strip out anything after a ?
-        [url+'?json=1', 'wordpress']
-      elsif url.include?("_story")
-        [url.gsub('_story','_json'), 'cms']
-      elsif url.include?("_blog")
-        [url.gsub('_blog','_json'), 'cms']
-      end
+      "http://apps-origin.washingtonpost.com/f/story-builder/api/url?url=#{url}"
     end
     
     # parses a Washington Post story or blog JSON response
@@ -57,71 +48,29 @@ module PostHaste
       Time.at(seconds.to_i).to_datetime
     end
     
-    def self.create_from_source(source, result, comment_limit)
-      if source == 'cms'
-        create(result, comment_limit)
-      elsif source == 'wordpress'
-        create_from_wordpress(result, comment_limit)
-      end
-    end
-    
     # creates an Article object from a JSON response
-    # with 15 latest comments, can be configured.
-    def self.create(params={}, limit=15)
-      self.new :type => params['contentConfig']['type'],
-               :uuid => params['contentConfig']['uuid'],
-               :title => params['contentConfig']['title'],
-               :blurb => params['contentConfig']['blurb'],
-               :has_correction => params['contentConfig']['hasCorrection'],
-               :correction => params['contentConfig']['correction'],
-               :has_clarification => params['contentConfig']['hasClarification'],
-               :clarification => params['contentConfig']['clarification'],
-               :permalink => params['contentConfig']['permaLinkURL'],
-               :short_url => params['contentConfig']['shortURL'],
-               :email_url => params['contentConfig']['emailURL'],
-               :comments_url => params['contentConfig']['commentsURL'],
-               :graphic_url => params['contentConfig']['graphicURL'],
-               :video_url => params['contentConfig']['videoURL'],
-               :byline => params['contentConfig']['credits'].first['name'],
-               :organization => params['contentConfig']['credits'].first['organization'],
-               :credits => params['contentConfig']['credits'].first['credit'],
-               :created_datetime => parse_datetime(params['contentConfig']['dateConfig']['dateCreated']),
-               :published_datetime => parse_datetime(params['contentConfig']['dateConfig']['datePublished']),
-               :display_datetime => parse_datetime(params['contentConfig']['dateConfig']['displayDate']),
-               :updated_datetime => parse_datetime(params['contentConfig']['dateConfig']['dateUpdated']),
-               :section => params['metaConfig']['section'],
-               :tags => params['metaConfig']['tags'],
-               :comments => parse_latest_comments(params['contentConfig']['permaLinkURL'], latest_comments_url(params['contentConfig']['permaLinkURL'], limit=limit))
+    # with 25 latest comments, can be configured.
+    def self.create(result={}, limit=25)
+      self.new type: result['type'],
+               uuid: result['uuid'],
+               title: result['title'],
+               mobile_headline: result['mobile_headline'],
+               web_headline: result['web_headline'],
+               summary: result['summary'],
+               permalink: result['_id'],
+               short_url: result['short_url'],
+               comments_url: latest_comments_url(result['_id'], limit),
+               keywords: result['clavis_keywords'],
+               byline: result['creator'].first['name'],
+               email: result['creator'].first['email'],
+               bio_page: result['creator'].first['bio_page'],
+               created_datetime: Time.at(result['created_date'].to_i),
+               published_datetime: Time.at(result['published_date'].to_i),
+               display_datetime: Time.at(result['display_date'].to_i),
+               section: result['kicker']['name'],
+               tags: result['tags'],
+               comments: parse_latest_comments(result['_id'], latest_comments_url(result['_id'], limit=limit))
       
     end
-    
-    # creates an Article object from a WordPress JSON response
-    def self.create_from_wordpress(params={}, limit=15)
-      self.new :type => params['post']['type'],
-               :uuid => params['post']['id'],
-               :title => params['post']['title'],
-               :blurb => params['post']['excerpt'],
-               :has_correction => nil,
-               :correction => nil,
-               :has_clarification => nil,
-               :clarification => nil,
-               :permalink => params['post']['url'],
-               :short_url => nil,
-               :email_url => nil,
-               :comments_url => params['post']['url'],
-               :graphic_url => nil,
-               :video_url => nil,
-               :byline => params['post']['author']['name'],
-               :organization => nil,
-               :credits => nil,
-               :created_datetime => parse_datetime(params['post']['date']),
-               :published_datetime => parse_datetime(params['post']['date']),
-               :display_datetime => parse_datetime(params['post']['modified']),
-               :updated_datetime => parse_datetime(params['post']['modified']),
-               :section => nil,
-               :tags => params['post']['tags'],
-               :comments => parse_latest_comments(params['post']['url'], latest_comments_url(params['post']['url'], limit))
-    end    
-
   end
 end

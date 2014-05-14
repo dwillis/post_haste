@@ -20,8 +20,9 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency "json"
   gem.add_runtime_dependency "nokogiri"
   
-  gem.add_development_dependency "rake"
+  gem.add_development_dependency "rake", '~> 10.3.1'
   gem.add_development_dependency "bundler"
   gem.add_development_dependency "shoulda"
+  gem.add_development_dependency "minitest"
   
 end

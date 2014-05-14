@@ -1,8 +1,8 @@
 # PostHaste
 
-A Ruby library that wraps the JSON endpoints provided for Washington Post articles and blog posts. Potentially suitable for building custom feeds of Washington Post content, in the event that you don't want to actually visit washingtonpost.com. It handles articles and blog posts from the Post's CMS (along with the most recent 15 comments), as well as The Post's WordPress-powered blogs, which have slightly different output (but also includes comments).
+A Ruby library that wraps the JSON endpoints provided for Washington Post articles and blog posts. Potentially suitable for building custom feeds of Washington Post content, in the event that you don't want to actually visit washingtonpost.com. It handles articles and blog posts from the Post's CMS (along with the most recent 15 comments), as well as The Post's WordPress-powered blogs.
 
-Tested under Ruby 1.9.2 & 1.9.3.
+Tested under Ruby 1.9.3, 2.0.0 and 2.1.0.
 
 ## Installation
 
@@ -22,9 +22,12 @@ Or install it yourself as:
 
 Post Haste currently can accept a URL of a Washington Post article or blog post, and converts that URL into a Ruby object with a number of methods that describe it, including its title, byline, published and updated datetimes, and more:
 
+  require 'post_haste'
+  include PostHaste
+
   url = "http://www.washingtonpost.com/blogs/the-fix/post/republicans-on-the-2012-gop-field-blah/2012/03/15/gIQAT7CSFS_blog.html"
 
-  @article = Article.create_from_url(url, 25) # 25 represents number of comments to grab, default is 15.
+  @article = Article.create_from_url(url, 10) # 10 represents number of comments to grab, default is 25.
 
   @article.title
 
@@ -42,10 +45,17 @@ Post Haste currently can accept a URL of a Washington Post article or blog post,
   
   => "http://www.washingtonpost.com/blogs/the-fix/post/republicans-on-the-2012-gop-field-blah/2012/03/15/gIQAT7CSFS_comment.html?commentID=washingtonpost.com/ECHO/item/1332046095-915-174"
   
-  
+See the full list of `Article` instance methods in article.rb.
+
 ## In the Wild
 
   See an example application at http://postcomments.herokuapp.com/
+
+### Tests
+
+To run the test suite, do:
+
+  rake test
 
 ## Contributing
 

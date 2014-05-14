@@ -22,6 +22,7 @@ Or install it yourself as:
 
 Post Haste currently can accept a URL of a Washington Post article or blog post, and converts that URL into a Ruby object with a number of methods that describe it, including its title, byline, published and updated datetimes, and more:
 
+```ruby
   require 'post_haste'
   include PostHaste
 
@@ -44,6 +45,7 @@ Post Haste currently can accept a URL of a Washington Post article or blog post,
   @article.comments.first.permalink(@article)
   
   => "http://www.washingtonpost.com/blogs/the-fix/post/republicans-on-the-2012-gop-field-blah/2012/03/15/gIQAT7CSFS_comment.html?commentID=washingtonpost.com/ECHO/item/1332046095-915-174"
+```
   
 See the full list of `Article` instance methods in article.rb.
 

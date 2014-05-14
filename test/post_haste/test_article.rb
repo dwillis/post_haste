@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class TestPostHaste::TestArticle < Test::Unit::TestCase
+class TestPostHaste::TestArticle < Minitest::Test
   include PostHaste
   
   context "Article.create from article" do

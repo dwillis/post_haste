@@ -34,7 +34,7 @@ module PostHaste
     # Given a Washington Post story or blog url, can turn that url into a JSON API endpoint
     # returns the url and the source used in Article creation
     def self.get_json(url)
-      "http://apps-origin.washingtonpost.com/f/story-builder/api/url?url=#{url}"
+      "http://apps-origin.washingtonpost.com/f/story-builder/api/url/?url=#{url}"
     end
     
     # parses a Washington Post story or blog JSON response

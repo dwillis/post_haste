@@ -1,7 +1,3 @@
-require 'open-uri'
-require 'uri'
-require 'json'
-
 module PostHaste
   class Comment
     # Represents a comment on a Washington Post story

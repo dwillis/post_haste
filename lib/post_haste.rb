@@ -3,4 +3,3 @@
 end
 require 'httparty'
 require 'uri'
-require 'json'

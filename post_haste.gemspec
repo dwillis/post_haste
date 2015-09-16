@@ -18,7 +18,6 @@ Gem::Specification.new do |gem|
   gem.required_rubygems_version = ">= 1.3.6"
   gem.rubyforge_project         = "post_haste"
   gem.add_runtime_dependency "httparty"
-  gem.add_runtime_dependency "json"
   gem.add_runtime_dependency "nokogiri"
 
   gem.add_development_dependency "rake", '~> 10.3.1'

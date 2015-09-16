@@ -1,7 +1,3 @@
-require 'httparty'
-require 'uri'
-require 'json'
-
 module PostHaste
   class Article
     # Represents a single Washington Post story or blog post.

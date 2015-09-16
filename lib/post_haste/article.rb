@@ -1,4 +1,4 @@
-require 'open-uri'
+require 'httparty'
 require 'uri'
 require 'json'
 
@@ -21,12 +21,13 @@ module PostHaste
     end
 
     def self.parse_latest_comments(article, comments_url)
-      results = JSON.parse(open(comments_url).read)
+      results = HTTParty.get(comments_url).parsed_response
       Comment.create_comments_from_objects(article, results['entries'])
     end
 
     # comment limit defaults to 15, but can be set higher or lower
     def self.create_from_url(url, comment_limit=15)
+      url.gsub('/blogs/','/news/') if url.include?('/blogs/')
       result = parse_json(get_json(url))
       create(result, comment_limit)
     end
@@ -39,7 +40,7 @@ module PostHaste
 
     # parses a Washington Post story or blog JSON response
     def self.parse_json(url)
-      JSON.parse(open(url).read)
+      HTTParty.get(url).parsed_response
     end
 
     # Post CMS produces unix timestamps, but with extra zeroes

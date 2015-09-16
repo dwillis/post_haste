@@ -5,9 +5,9 @@ class TestPostHaste::TestArticle < Minitest::Test
 
   context "Article.create from article" do
     setup do
-      url = "http://www.washingtonpost.com/politics/joe-biden-digging-back-into-his-roots-to-move-obama-forward/2012/03/14/gIQARwYBDS_story.html"
-      json_url = Article.get_json(url)
-      @result = Article.parse_json(json_url)
+      @url = "http://www.washingtonpost.com/politics/joe-biden-digging-back-into-his-roots-to-move-obama-forward/2012/03/14/gIQARwYBDS_story.html"
+      @json_url = Article.get_json(@url)
+      @result = Article.parse_json(@json_url)
       @article = Article.create(@result)
     end
 
@@ -25,9 +25,9 @@ class TestPostHaste::TestArticle < Minitest::Test
 
   context "Article.create from blog post" do
     setup do
-      url = "http://www.washingtonpost.com/blogs/the-fix/post/republicans-on-the-2012-gop-field-blah/2012/03/15/gIQAT7CSFS_blog.html"
-      json_url = Article.get_json(url)
-      @result = Article.parse_json(json_url)
+      @url = "http://www.washingtonpost.com/blogs/the-fix/post/republicans-on-the-2012-gop-field-blah/2012/03/15/gIQAT7CSFS_blog.html"
+      @json_url = Article.get_json(@url)
+      @result = Article.parse_json(@json_url)
       @article = Article.create(@result)
     end
 
@@ -45,9 +45,9 @@ class TestPostHaste::TestArticle < Minitest::Test
 
   context "Article.create from Wordpress blog post" do
     setup do
-      url = "http://www.washingtonpost.com/blogs/wonkblog/wp/2013/01/18/breaking-inside-the-feds-2007-crisis-response/"
-      json_url = Article.get_json(url)
-      @result = Article.parse_json(json_url)
+      @url = "http://www.washingtonpost.com/blogs/wonkblog/wp/2013/01/18/breaking-inside-the-feds-2007-crisis-response"
+      @json_url = Article.get_json(@url)
+      @result = Article.parse_json(@json_url)
       @article = Article.create(@result)
     end
 

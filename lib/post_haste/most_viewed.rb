@@ -10,17 +10,17 @@ module PostHaste
     end
 
     def self.all(platform='web', limit=25)
-      url = "http://js.washingtonpost.com/most-viewed/#{platform}/article,blog.feed-#{limit}.json"
+      url = "https://js.washingtonpost.com/most-viewed/#{platform}/article,blog.feed-#{limit}.json"
       create(HTTParty.get(url).parsed_response, platform, 'all')
     end
 
     def self.articles(platform='web', limit=25)
-      url = "http://js.washingtonpost.com/most-viewed/#{platform}/article.feed-#{limit}.json"
+      url = "https://js.washingtonpost.com/most-viewed/#{platform}/article.feed-#{limit}.json"
       create(HTTParty.get(url).parsed_response, platform, 'articles')
     end
 
     def self.blogs(platform='web', limit=25)
-      url = "http://js.washingtonpost.com/most-viewed/#{platform}/blog.feed-#{limit}.json"
+      url = "https://js.washingtonpost.com/most-viewed/#{platform}/blog.feed-#{limit}.json"
       create(HTTParty.get(url).parsed_response, platform, 'blogs')
     end
 

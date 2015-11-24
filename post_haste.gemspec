@@ -19,6 +19,7 @@ Gem::Specification.new do |gem|
   gem.rubyforge_project         = "post_haste"
   gem.add_runtime_dependency "httparty"
   gem.add_runtime_dependency "nokogiri"
+  gem.add_runtime_dependency "metainspector"
 
   gem.add_development_dependency "rake", '~> 10.3.1'
   gem.add_development_dependency "bundler"
